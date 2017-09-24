@@ -1,0 +1,58 @@
+title = "归档"
+url = "/archives/:year?/:month?"
+layout = "default"
+description = "文章归档"
+is_hidden = 0
+==
+<?php
+use RainLab\Blog\Models\Post;
+
+function onStart()
+{
+    $year = $this->param('year');
+    $month = $this->param('month');
+    if(!empty($year)) {
+        $query = Post::whereYear('created_at','=',$year);
+        if(!empty($month)) {
+            $query = $query->whereMonth('created_at','=',$month);
+        }
+        $this['lists'] = [$year=>$query->get()];
+    } else {
+        $posts = Post::all();
+        $this['lists'] = $posts->groupBy(function($item,$key){
+            return strstr($item['created_at'], '-',true);    
+        });
+    }
+   
+}
+
+
+function onEnd()
+{
+    $this->page->title = '归档';
+}
+?>
+==
+{% for key,posts in lists %}
+<section class="archives-wrap">
+    <div class="archive-year-wrap">
+      <a href="/archives/{{key}}" class="archive-year">{{key}}</a>
+    </div>
+    <div class="archives">
+        {% for post in posts %}
+        <article class="archive-article archive-type-post">
+          <div class="archive-article-inner">
+            <header class="archive-article-header">
+              <a href="/show/{{post.created_at|date('Ymd')}}/{{post.slug}}.html" class="archive-article-date">
+              <time datetime="{{post.created_at}}" itemprop="datePublished">{{post.published_at|date('m月d日')}}</time>
+             </a>      
+            <h1 itemprop="name">
+              <a class="archive-article-title" href="/show/{{post.created_at|date('Ymd')}}/{{post.slug}}.html">{{post.title}}</a>
+            </h1>
+            </header>
+          </div>
+        </article>
+        {% endfor %}
+   </div>
+</section>
+{% endfor %}

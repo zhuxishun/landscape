@@ -1,0 +1,32 @@
+==
+<?php
+use RainLab\Blog\Models\Post;
+
+function onStart()
+{
+    $posts = Post::orderBy('published_at','desc')->get();
+    $this['lists'] = $posts->groupBy(function($item,$key){
+        return substr($item['created_at'], 0,7);    
+    });
+    
+   $this['months'] = [
+       '01'=>'一','02'=>'二','03'=>'三','04'=>'四',
+       '05'=>'五','06'=>'六','07'=>'七','08'=>'八',
+       '09'=>'九','10'=>'十','11'=>'十一','12'=>'十二'
+       ];
+}
+?>
+==
+<div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list">
+      {% for key,posts in lists %}
+      <li class="archive-list-item">
+      <a class="archive-list-link" href="/archives/{{key|replace({'-':'/'})}}">{{months[key|date('m')]}}月 {{key|date('Y')}}</a>
+       <span class="archive-list-count">{{posts|length}}</span>
+       </li>
+       {% endfor %}
+       </ul>
+    </div>
+  </div>

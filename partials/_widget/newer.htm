@@ -1,0 +1,23 @@
+==
+<?php
+use RainLab\Blog\Models\Post;
+
+function onStart()
+{
+    $this['posts'] = Post::orderBy('created_at','desc')->take(20)->get();
+}
+?>
+==
+<div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        {% for post in posts %}
+          <li>
+            <a href="/show/{{ post.created_at|date('Ymd') }}/{{post.slug}}.html">{{post.title}}</a>
+          </li>
+        {% endfor %}
+        
+      </ul>
+    </div>
+  </div>

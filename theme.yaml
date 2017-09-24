@@ -1,0 +1,9 @@
+name: landscape
+description: 'theme from hexo landscape'
+author: zhuxishun
+homepage: 'http://www.cdfarmer.cn'
+code: 'landscape'
+form: theme_fields.yaml
+require:
+    - RainLab.Blog
+

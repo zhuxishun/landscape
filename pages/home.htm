@@ -1,0 +1,26 @@
+title = "首页"
+url = "/"
+layout = "default"
+is_hidden = 0
+==
+<?php
+function onStart()
+{
+   $this['post'] = RainLab\Blog\Models\Post::orderBy('published_at','desc')->first();
+}
+?>
+==
+<article id="post-home" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">
+                 {{post.title}}
+            </h1>
+        </header>
+
+        <div class="article-entry" itemprop="articleBody">
+              {{ post.content|md}}
+        </div>
+    </div>
+
+</article>

@@ -1,0 +1,21 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    site_name:
+        label: Site name
+        comment: The website name as it should appear on the front-end
+        default: landscape
+        span: auto
+
+    site_motto:
+        label: Site motto
+        comment: A short statement about the website.
+        default: Get back to basics
+        span: auto
+    site_icp:
+            label: Site icp
+            comment: icp info
+            default: © 2017 xxxxxx
+            span: auto

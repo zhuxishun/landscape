@@ -1,0 +1,72 @@
+title = "文章显示"
+url = "/show/:date/:slug"
+layout = "default"
+description = "文章内容显示"
+is_hidden = 0
+==
+<?php
+use RainLab\Blog\Models\Post;
+
+function onStart()
+{
+    $slug = $this->param('slug');
+    $slug = strchr($slug,'.',true);
+    $this['post'] = Post::where('slug',$slug)->first();
+    $this['next'] = Post::where('id','>',$this['post']['id'])->first();
+    $this['prev'] = Post::where('id','<',$this['post']['id'])->first();
+    
+}
+
+
+function onEnd()
+{
+    $this->page->title = $this['post']['title'];
+}
+?>
+==
+<article id="post-{{post.slug}}" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-meta">
+        <a href="/show/{{post.created_at|date('Ymd')}}/{{post.slug}}.html" class="article-date">
+            <time datetime="{{post.created_at}}" itemprop="datePublished">{{post.created_at|date('Y-m-d') }}</time>
+        </a>
+        <div class="article-category">
+            {% for category in post.categories %}
+            <a class="article-category-link" href="/categories/{{category.slug}}.html">{{category.name}}</a>
+            {% endfor %}
+        </div>
+
+    </div>
+    <div class="article-inner">
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">
+                {{post.title}}
+            </h1>
+        </header>
+
+        <div class="article-entry" itemprop="articleBody">
+            {{ post.content|md}}
+        </div>
+
+    </div>
+
+
+    <nav id="article-nav">
+  
+    {% if prev %}
+    <a href="/show/{{prev.created_at|date('Ymd')}}/{{prev.slug}}.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">{{prev.title}}</div>
+    </a>
+    {% endif %}
+  
+   {% if next %}
+    <a href="/show/{{next.created_at|date('Ymd')}}/{{next.slug}}.html" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">{{next.title}}</div>
+    </a>
+    {% endif %}
+  
+    </nav>
+
+
+</article>

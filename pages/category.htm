@@ -1,0 +1,44 @@
+title = "分类"
+url = "/categories/:slug"
+layout = "default"
+description = "分类列表页面"
+is_hidden = 0
+==
+<?php
+use RainLab\Blog\Models\Category;
+
+function onStart()
+{
+    $slug = $this->param('slug');
+    $slug = strchr($slug,'.',true);
+    $this['category'] = Category::where('slug',$slug)->first();
+}
+
+
+function onEnd()
+{
+    $this->page->title = $this['category']['name'];
+}
+?>
+==
+<section class="archives-wrap">
+    <div class="archive-year-wrap">
+      <a href="/archives/2017" class="archive-year">2017</a>
+    </div>
+    <div class="archives">
+        {% for post in category.posts %}
+        <article class="archive-article archive-type-post">
+          <div class="archive-article-inner">
+            <header class="archive-article-header">
+              <a href="/show/{{post.created_at|date('Ymd')}}/{{post.slug}}.html" class="archive-article-date">
+              <time datetime="{{post.created_at}}" itemprop="datePublished">{{post.published_at|date('m月d日')}}</time>
+             </a>      
+            <h1 itemprop="name">
+              <a class="archive-article-title" href="/show/{{post.created_at|date('Ymd')}}/{{post.slug}}.html">{{post.title}}</a>
+            </h1>
+            </header>
+          </div>
+        </article>
+        {% endfor %}
+   </div>
+</section>
