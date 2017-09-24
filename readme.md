@@ -24,3 +24,5 @@ git clone git@github.com:zhuxishun/landscape.git
 设置站点的名称、介绍和icp备案信息
 
 
+> 示例：[码农程序员](http://www.cdfarmer.cn/)
+
